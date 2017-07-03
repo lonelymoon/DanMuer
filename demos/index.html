@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>Document</title>
+<style type="text/css">
+html,body{
+	margin: 0;
+	padding: 0;
+}
+#video{
+	position: relative;
+	max-height: 100%;
+	max-width: 100%;
+	display: block;
+	margin: 0 auto;
+}
+</style>
+</head>
+<body>
+<div class="wrapper" style="max-width:960px;height:480px;background:#000;position:relative;">
+	<video id="video" src="2.mp4" -webkit-playsinline playsinline></video>
+</div>
+<span class="fps"></span>
+<script type="text/javascript" src="../dist/js/danMuer.min.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>
