@@ -1,8 +1,8 @@
-//main
 const loop = Symbol("loop");
 const init = Symbol("init"); 		//初始化
 const requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
 
+//main
 class DMer {
 	//初始化
 	constructor(wrap,opts = {}){
@@ -22,6 +22,7 @@ class DMer {
 		this.effect = new effectDM(this.canvas2,opts);
 
 		this.name = opts.name || "";
+		this.fps = 0;
 
 		//status
 		this.drawing = opts.auto || false;
@@ -30,6 +31,8 @@ class DMer {
 		//fn
 		this[init]();
 		this[loop]();
+		if(opts.enableEvent)
+		this.initEvent(opts);
 	}
 
 	[init](){
@@ -51,11 +54,52 @@ class DMer {
 			return false;
 		} else {
 			let [w,h,time] = [this.width,this.height,now - prev];
+			this.fps = 1000 / time >> 0;
 			normal.update(w,h,time);
 			effect.update(w,h,time);
 		}
 
 		requestAnimationFrame( () => { this[loop](normal,effect,now); } );
+	}
+
+	initEvent(opts){
+		let [el,normal,searching] = [this.canvas2,this.normal,false];
+
+		el.onmouseup = function(e){
+			e = e || event;
+
+			if( searching ) return false;
+			searching = true;
+
+			if( e.button == 2 ){
+				let [pos,result] = [e.target.getBoundingClientRect(),""];
+				let [x,y,i,items,item] = [ e.clientX - pos.left,
+							  			   e.clientY - pos.top,
+							  			   0, normal.save ];
+				for( ; item = items[i++]; ){
+					let [ix,iy,w,h] = [item.x, item.y, item.width + 10, item.height];
+
+					if( x < ix  || x > ix + w || y < iy - h/2 || y > iy + h/2 || item.hide || item.recovery )
+					continue;
+
+					result = item;
+					break;
+				}
+			
+				let callback = opts.callback || function(){};
+
+				callback(result);
+
+				searching = false;
+			}
+
+		};
+
+		el.oncontextmenu = function(e){
+			e = e || event;
+			e.preventDefault();
+		};
+
 	}
 
 	// API 
@@ -84,9 +128,9 @@ class DMer {
 	}
 
 	//重置
-	reset(i){
+	reset(i,j){
 		this.normal.reset(i);
-		this.effect.reset(i);
+		this.effect.reset(j);
 	}
 
 	//暂停
@@ -104,6 +148,11 @@ class DMer {
 	//添加过滤
 	addFilter(key,val){
 		this.normal.addFilter(key,val);
+	}
+
+	//移除过滤
+	removeFilter(key,val){
+		this.normal.removeFilter(key,val);
 	}
 
 	//禁用高级弹幕
@@ -146,6 +195,11 @@ class DMer {
 		this.normal.changeStyle(opts);
 	}
 
+	//添加渐变
+	addGradient(type, opts){
+		this.normal.addGradient(type,opts);
+	}
+
 	//启用
 	start(){
 		if(this.drawing)
@@ -160,4 +214,8 @@ class DMer {
 		this.drawing = false;
 	}
 
+	//fps
+	getFPS(){
+		return this.fps;
+	}
 }

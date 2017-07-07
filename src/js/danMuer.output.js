@@ -1,29 +1,39 @@
-//选择对外暴露的接口
-let DMOutput = function(wrapper,opts){
-	let DM = new DMer(wrapper,opts);
+let DanMuer = function(wrapper,opts){
+	let proxyDMer = new Proxy( new DMer(wrapper,opts), {
+		get : function(target,key){
+			if(typeof target[key] == "function")
+			return target[key].bind(target);
+			return target[key];
+		}
+	});
+
+	let DM = proxyDMer;
 
 	return {
-		start : DM.start.bind(DM),
-		stop : DM.stop.bind(DM),
-		changeStyle : DM.changeStyle.bind(DM),
-		setSize : DM.setSize.bind(DM),
-		inputData : DM.inputData.bind(DM),
-		inputEffect : DM.inputEffect.bind(DM),
-		clear : DM.clear.bind(DM),
-		reset : DM.reset.bind(DM),
-		pause : DM.pause.bind(DM),
-		run : DM.run.bind(DM),
-		addFilter : DM.addFilter.bind(DM),
-		disableEffect : DM.disableEffect.bind(DM),
-		enableEffect : DM.enableEffect.bind(DM),
-		getSize : DM.getSize.bind(DM)
+		pause : DM.pause, //暂停
+		run : DM.run, //继续
+		start : DM.start, //运行
+		stop : DM.stop,	//停止
+		changeStyle : DM.changeStyle, //修改普通弹幕全局样式
+		addGradient : DM.addGradient, //普通弹幕渐变
+		setSize : DM.setSize, //修改宽高
+		inputData : DM.inputData, //向普通弹幕插入数据
+		inputEffect : DM.inputEffect, //向高级弹幕插入数据
+		clear : DM.clear, //清除所有弹幕
+		reset : DM.reset, //重新从某个弹幕开始
+		addFilter : DM.addFilter, //添加过滤
+		removeFilter : DM.removeFilter, //删除过滤
+		disableEffect : DM.disableEffect, //不启用高级弹幕
+		enableEffect : DM.enableEffect, //启用高级弹幕
+		getSize : DM.getSize, //获取宽高,
+		getFPS : DM.getFPS //获取fps
 	};
 };
 
 if( typeof module != 'undefined' && module.exports ){
-	module.exports = DMOutput;
+	module.exports = DanMuer;
 } else if( typeof define == "function" && define.amd ){
-	define(function(){ return DMOutput;});
+	define(function(){ return DanMuer;});
 } else {
-	window.DanMuer = DMOutput;
+	window.DanMuer = DanMuer;
 }

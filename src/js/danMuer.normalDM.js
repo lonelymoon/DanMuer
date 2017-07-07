@@ -1,3 +1,4 @@
+//普通弹幕
 class normalDM{
 	constructor(cv,opts = {}){
 
@@ -13,18 +14,18 @@ class normalDM{
 			top : [],
 			bottom : []
 		}; //存放不同类型弹幕的通道数
-		this.filters = [];
+		this.filters = {}; //过滤
 
-		this.leftTime = opts.leftTime || 2000;  //头部、底部静止型弹幕的是显示时长
+		this.leftTime = opts.leftTime || 2000;  //头部、底部静止型弹幕的显示时长
 		this.space = opts.space || 10;  		//弹幕的行距
 		this.unitHeight = 0; 					//弹幕的高度
 		this.rowNum = 0;						//通道行数
+		this.baseSpeed = opts.baseSpeed || 2;	//弹幕基础速度
+		this.baseWidth = opts.baseWidth || 800;	//与实际大小设置并无关系，用于当canvas宽高调整时，速度变化的被除数，如 将canvas从800px增大到1600px，则速度增快 1600/this.baseWidth倍
 
 
 		this.startIndex = 0;		//循环时的初始下标
 		this.looped = false;		//是否已经经历过一次循环
-
-		this.fps = document.querySelector(".fps");
 
 		this.changeStyle(opts);
 	}
@@ -62,22 +63,69 @@ class normalDM{
 	addFilter(key,val){
 		if(!key || !val) return false;
 		
-		this.filters.push({
-			"key" : key,
-			"value" : val
-		});
+		let [filters] = [this.filters];
+
+		if(!filters[key])
+		filters[key] = [];
+		
+		if( !filters[key].find( v => val === v ) )
+		filters[key].push(val);
+
+		this.doFilter();
 	}
 
 	//过滤
 	filter(obj){
 		let filters = this.filters;
-		for( let res of filters ){
-			if( obj[res.key].includes(res.value) ){
+		//遍历属性
+		for( let res of Object.keys(filters) ){
+			let resArr = filters[res];
+			let [i,len] = [0,resArr.length];
+			//遍历属性对应的数组
+			for( ; i < len; i++ ){
+				//是否包含对应的值
+				if( !obj[res].includes(resArr[i]) ){
+					obj.hide = false;
+					continue;
+				}
 				obj.hide = true;
 				return false;
 			}
 		}
 
+	}
+
+	//进行过滤
+	doFilter(){
+		let [i,items,item] = [0,this.save];
+		for( ; item = items[i++]; ){
+			this.filter(item);
+		}
+	}
+
+	//移除过滤
+	removeFilter(key,val){
+		if(!key) return false;
+
+		let [filters,fltArr] = [this.filters];
+
+		fltArr = filters[key];
+
+		if(!fltArr) return false;
+
+		if(!val){
+			delete filters[key];
+		} else {
+			let [i,items,item] = [0,fltArr];
+			for( ; item = items[i++]; ){
+				if( item === val ){
+					filters[key].splice(i-1,1);
+					break;
+				}
+			}
+		}
+
+		this.doFilter();
 	}
 
 	//清屏
@@ -93,6 +141,79 @@ class normalDM{
 					" " + this.globalFamily;
 	}
 
+	//添加渐变
+	addGradient(type,opts = {}){
+
+		if(!type || typeof type != "string" ) return false;
+
+		let result = null;
+
+		if( type == "radial" ){
+			result = this.addRadialGradient(opts);
+		} else if( type == "linear" ) {
+			result = this.addLinearGradient(opts);
+		} else {
+			return false;
+		}
+
+		this.changeStyle({
+			fontColor : result
+		});
+
+	}
+
+	//线性渐变
+	addLinearGradient(opts){
+		let [sx,sy,ex,ey,stops] = [
+			opts.startX || 0,
+			opts.startY || 0,
+			opts.endX || this.width,
+			opts.endY || this.height,
+			opts.colorStops || [{
+				"point" : 0,
+				"color" : this.globalColor
+			},{
+				"point" : 1,
+				"color" : this.globalColor
+			}] 
+		];
+
+		let linear = this.cxt.createLinearGradient(sx,sy,ex,ey);
+
+		for( let stop of stops ){
+			linear.addColorStop(stop.point,stop.color);
+		}
+
+		return linear;
+	}
+
+	//圆形渐变
+	addRadialGradient(opts){
+		let [sx,sy,sr,ex,ey,er,stops] = [
+			opts.startX || this.width / 2,
+			opts.startY || this.height / 2,
+			opts.startR || 0,
+			opts.endX || this.width / 2,
+			opts.endY || this.height / 2,
+			opts.endR || this.width,
+			opts.colorStops || [{
+				"point" : 0,
+				"color" : this.globalColor
+			},{
+				"point" : 1,
+				"color" : this.globalColor
+			}] 
+		];
+
+		let radial = this.cxt.createRadialGradient(sx,sy,sr,ex,ey,er);
+
+		for( let stop of stops ){
+			radial.addColorStop(stop.point,stop.color);
+		}
+
+		return radial;
+	}
+
 	//改变全局样式
 	changeStyle(opts = {}){
 		
@@ -101,7 +222,8 @@ class normalDM{
 		this.globalFamily = opts.fontFamily || this.globalFamily || "微软雅黑"; //字体
 		this.globalStyle = opts.fontStyle || this.globalStyle || "normal"; //字体样式
 		this.globalWeight = opts.fontWeight || this.globalWeight || "normal"; //字体粗细
-		this.globalColor = opts.fontColor || this.globalColor || "#66ccff"; //字体颜色
+		this.globalColor = opts.fontColor || this.globalColor || "#ffffff"; //字体颜色
+		this.opacity = opts.opacity || this.opacity || 1; //透明程度
 
 		//表示进行过一次全局样式变化
 		this.globalChanged = true;
@@ -119,12 +241,11 @@ class normalDM{
 		cxt.font = this.globalFont;
 		cxt.textBaseline = "middle";
 		cxt.fillStyle = this.globalColor;
-
+		cxt.globalAlpha = this.opacity;
 	}
 
 	//循环
 	update(w,h,time){
-		this.fps.innerHTML = 1000 / time >> 0;
 
 		let [items,cxt] = [this.save,this.cxt];
 
@@ -172,7 +293,7 @@ class normalDM{
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
 
-		this.speedScale = this.width / 600;
+		this.speedScale = Math.max(this.width / this.baseWidth, 0.7);
 
 		this.deleteRow();
 		this.countRows();
@@ -206,6 +327,7 @@ class normalDM{
 		//重新生成通道
 		for( let i = 0 ; i < rowNum; i++ ){
 			let obj = {
+				idx : i,
 				y : unitHeight * i + 20
 			};
 			rows.slide.push(obj);
@@ -230,6 +352,11 @@ class normalDM{
 		const row = ( type != "bottom" ? rows[type].shift() : rows[type].pop() );
 		//生成临时通道
 		const tempRow = this["getRow_"+type]();
+
+		if( row && item.type == "slide" ){
+			item.x += ( row.idx * 8 );
+			item.speed += ( row.idx / 3 );
+		}
 
 		//返回分配的通道
 		return row || tempRow;
@@ -270,9 +397,10 @@ class normalDM{
 		for( ; item = items[i++]; ){
 			let w = cxt.measureText(item.text).width >> 0;
 			item.width = w;
+			item.height = parseInt(this.globalSize);
 			//更新初始 x
-			item.x = cw + (Math.random() * 30 >> 0);
-			item.speed = 2;
+			item.x = cw;
+			item.speed = this.baseSpeed;
 			if(item.type != "slide"){
 				item.x = (cw - w ) / 2;
 				item.leftTime = this.leftTime;
@@ -287,7 +415,7 @@ class normalDM{
 	updateStyle(item,cxt){
 		cxt.font = this.globalStyle + 
 					" " + this.globalWeight + 
-					" " + item.globalSize + 
+					" " + item.fontSize + 
 					" " + this.globalFamily;
 		cxt.fillStyle = item.color || this.globalColor;
 	}
@@ -380,8 +508,9 @@ class normalDM{
 
 		for( ; item = items[i++]; ){
 			if(!item.recovery) return false;
+			//更新下标并清除row
 			this.startIndex = i;
-			item.row = null;
+			item.row = null;   
 		}
 	}
 

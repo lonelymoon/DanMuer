@@ -5,7 +5,7 @@ class effectDM{
 
 		this.canvas = cv;
 		this.cxt = cv.getContext("2d");
-		this.enable = opts.enable || true;
+		this.enable = opts.enable === false ? false : true;
 
 		this.startIndex = 0;
 
@@ -62,6 +62,8 @@ class effectDM{
 
 	//初始化参数
 	initStep(step){
+
+		step.type = step.type || "linear";
 		step.scaleStartX = step.scaleStartX || 1;
 		step.scaleStartY = step.scaleStartY || 1;
 		step.scaleEndX = step.scaleEndX  || 1;
@@ -77,16 +79,20 @@ class effectDM{
 		step.skewEndX = step.skewEndX || 0;
 		step.skewEndY = step.skewEndY || 0;
 		step.pastTime = step.pastTime || 0;
-		step.duration = step.duration || 0;
+		step.duration = step.duration || 3000;
 		step.scaleDistX = step.scaleEndX - step.scaleStartX;
 		step.scaleDistY = step.scaleEndY - step.scaleStartY;
 		step.rotateDist = step.rotateEnd - step.rotateStart;
+		step.opacity = step.opacity || 1;
+		step.fillStyle = step.fillStyle || "#ffffff";
+		step.strokeStyle = step.strokeStyle || "#ffffff";
+		//圆形
+		step.radius = step.radius || 10;
 		//判断多边形
 		step.distX = step.points ? ( step.distX || 0 ) : step.endX - step.startX;
 		step.distY = step.points ? ( step.distY || 0 ) : step.endY - step.startY;
 		step.skewDistX = step.skewEndX - step.skewStartX;
 		step.skewDistY = step.skewEndY - step.skewStartY;
-
 	}
 
 	//更新canvas尺寸
@@ -146,7 +152,6 @@ class effectDM{
 		stepItem.rotate = this.Tween(type, past, stepItem.rotateStart, stepItem.rotateDist, duration );
 		stepItem.skewX = this.Tween(type, past, stepItem.skewStartX, stepItem.skewDistX, duration );
 		stepItem.skewY = this.Tween(type, past, stepItem.skewStartY, stepItem.skewDistY, duration);
-
 	}
 	//多边形特殊设置
 	stepCheckPolygon(stepItem,item){
@@ -189,6 +194,7 @@ class effectDM{
 		cxt.beginPath();
 		cxt.transform(stepItem.scaleX,tx,ty,stepItem.scaleY,x + w/2,y + h/2 );
 		cxt.rotate( stepItem.rotate * Math.PI / 180 );
+		cxt.globalAlpha = stepItem.opacity;
 		cxt.rect( - w / 2 , - h / 2 , w , h);
 		cxt.closePath();
 		cxt.fillStyle = stepItem.fillStyle;
@@ -210,6 +216,7 @@ class effectDM{
 		let [tx,ty] = [Math.tan(stepItem.skewX * rotUnit),Math.tan(stepItem.skewY * rotUnit)];
 		cxt.transform(stepItem.scaleX,tx,ty,stepItem.scaleY,x + w/2,y + h/2 );
 		cxt.rotate( stepItem.rotate * Math.PI / 180 );
+		cxt.globalAlpha = stepItem.opacity;
 		cxt.fillStyle = stepItem.fillStyle;
 		cxt.strokeStyle = stepItem.strokeStyle;
 		cxt.fillText(text,-w/2,-h/2);
@@ -224,6 +231,7 @@ class effectDM{
 		cxt.beginPath();
 		cxt.transform(stepItem.scaleX,tx,ty,stepItem.scaleY, x, y);
 		cxt.rotate( stepItem.rotate * Math.PI / 180 );
+		cxt.globalAlpha = stepItem.opacity;
 		cxt.fillStyle = stepItem.fillStyle;
 		cxt.strokeStyle = stepItem.strokeStyle;
 
@@ -234,6 +242,21 @@ class effectDM{
 		for( ; point = points[i++]; ){
 			cxt.lineTo( point.x - x, point.y - y );
 		}
+		cxt.closePath();
+		cxt.fill();
+		cxt.stroke();
+	}
+
+	circle( stepItem, cxt, Math, rotUnit ){
+		let [x,y,r] = [stepItem.x,stepItem.y,stepItem.radius];
+		let [tx,ty] = [Math.tan(stepItem.skewX * rotUnit),Math.tan(stepItem.skewY * rotUnit)];
+		cxt.beginPath();
+		cxt.transform(stepItem.scaleX,tx,ty,stepItem.scaleY,x + r,y + r );
+		cxt.rotate( stepItem.rotate * Math.PI / 180 );
+		cxt.globalAlpha = stepItem.opacity;
+		cxt.fillStyle = stepItem.fillStyle;
+		cxt.strokeStyle = stepItem.strokeStyle;
+		cxt.arc( 0, 0, r, 0, Math.PI * 2, false );
 		cxt.closePath();
 		cxt.fill();
 		cxt.stroke();
