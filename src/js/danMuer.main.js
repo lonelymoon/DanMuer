@@ -26,7 +26,6 @@ class DMer {
 
 		//status
 		this.drawing = opts.auto || false;
-		this.startTime = new Date().getTime();
 
 		//fn
 		this[init]();
@@ -44,7 +43,7 @@ class DMer {
 	}
 
 	//loop
-	[loop](normal = this.normal,effect = this.effect,prev = this.startTime){
+	[loop](normal = this.normal,effect = this.effect,prev = new Date().getTime()){
 		
 		let now = new Date().getTime();
 

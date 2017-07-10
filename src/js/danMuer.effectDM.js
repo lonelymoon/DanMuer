@@ -9,6 +9,14 @@ class effectDM{
 
 		this.startIndex = 0;
 
+		this.Tween = new Proxy(new Tween(),{
+			get : function(target,key){
+				if( typeof target[key] == "function" )
+				return target[key].bind(target);
+				return target[key];
+			}
+		}); //实例化Tween类
+
 		this.save = [];
 	}
 
@@ -63,7 +71,8 @@ class effectDM{
 	//初始化参数
 	initStep(step){
 
-		step.type = step.type || "linear";
+		step.timing = step.timing || "linear";
+		step.type = step.type || "quad";
 		step.scaleStartX = step.scaleStartX || 1;
 		step.scaleStartY = step.scaleStartY || 1;
 		step.scaleEndX = step.scaleEndX  || 1;
@@ -139,19 +148,19 @@ class effectDM{
 
 		stepItem.pastTime += time;
 
-		let [type,past,duration] = [stepItem.type || "linear",stepItem.pastTime,stepItem.duration];
-
+		let [timing,past,duration] = [stepItem.timing,stepItem.pastTime,stepItem.duration];
+		let Tween = this.Tween[stepItem.type];
 		//多边形特殊处理
 		if(item.type == "polygon" )
 		this.stepCheckPolygon(stepItem,item);
 
-		stepItem.x = this.Tween(type, past, stepItem.startX, stepItem.distX, duration);
-		stepItem.y = this.Tween(type, past, stepItem.startY, stepItem.distY, duration);
-		stepItem.scaleX = this.Tween(type, past, stepItem.scaleStartX, stepItem.scaleDistX, duration );
-		stepItem.scaleY = this.Tween(type, past, stepItem.scaleStartY, stepItem.scaleDistY, duration );
-		stepItem.rotate = this.Tween(type, past, stepItem.rotateStart, stepItem.rotateDist, duration );
-		stepItem.skewX = this.Tween(type, past, stepItem.skewStartX, stepItem.skewDistX, duration );
-		stepItem.skewY = this.Tween(type, past, stepItem.skewStartY, stepItem.skewDistY, duration);
+		stepItem.x = Tween(timing, past, stepItem.startX, stepItem.distX, duration);
+		stepItem.y = Tween(timing, past, stepItem.startY, stepItem.distY, duration);
+		stepItem.scaleX = Tween(timing, past, stepItem.scaleStartX, stepItem.scaleDistX, duration );
+		stepItem.scaleY = Tween(timing, past, stepItem.scaleStartY, stepItem.scaleDistY, duration );
+		stepItem.rotate = Tween(timing, past, stepItem.rotateStart, stepItem.rotateDist, duration );
+		stepItem.skewX = Tween(timing, past, stepItem.skewStartX, stepItem.skewDistX, duration );
+		stepItem.skewY = Tween(timing, past, stepItem.skewStartY, stepItem.skewDistY, duration);
 	}
 	//多边形特殊设置
 	stepCheckPolygon(stepItem,item){
@@ -275,25 +284,4 @@ class effectDM{
 		}
 	}
 
-	//运动时间曲线
-	Tween(type,...data){
-
-		const trail = {
-			
-			linear : ( t, b, c, d ) => c * t/d + b,
-
-			easeIn : ( t, b, c, d ) => c * ( t /= d ) * t + b,
-
-			easeOut : ( t, b, c, d ) => -c *( t/=d )*( t - 2 ) + b,
-
-			easeInOut : ( t, b, c, d ) => {
-				if ( ( t/=d/2 ) < 1 ) return c/2 * t * t + b;
-            	return -c/2 * ( (--t) * (t-2) - 1 ) + b;
-			}
-
-		}
-
-		return !!trail[type] && trail[type](...data);
-
-	}
 }

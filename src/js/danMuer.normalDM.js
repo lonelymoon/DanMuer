@@ -16,13 +16,22 @@ class normalDM{
 		}; //存放不同类型弹幕的通道数
 		this.filters = {}; //过滤
 
+		this.Tween = new Proxy(new Tween(),{
+			get : function(target,key){
+				if( typeof target[key] == "function" )
+				return target[key].bind(target);
+				return target[key];
+			}
+		}); //Tween时间曲线
+
 		this.leftTime = opts.leftTime || 2000;  //头部、底部静止型弹幕的显示时长
 		this.space = opts.space || 10;  		//弹幕的行距
 		this.unitHeight = 0; 					//弹幕的高度
 		this.rowNum = 0;						//通道行数
-		this.baseSpeed = opts.baseSpeed || 2;	//弹幕基础速度
-		this.baseWidth = opts.baseWidth || 800;	//与实际大小设置并无关系，用于当canvas宽高调整时，速度变化的被除数，如 将canvas从800px增大到1600px，则速度增快 1600/this.baseWidth倍
-
+		this.direction = opts.direction || "rtol"; //弹幕方向 ，默认从右往左
+		this.duration = opts.duration || 9000; //弹幕运动时间
+		this.type = opts.type || "quad"; 		//Tween算法种类，默认为quad（二次方）
+		this.timing = opts.timing || "linear";	//Tween时间曲线
 
 		this.startIndex = 0;		//循环时的初始下标
 		this.looped = false;		//是否已经经历过一次循环
@@ -244,31 +253,6 @@ class normalDM{
 		cxt.globalAlpha = this.opacity;
 	}
 
-	//循环
-	update(w,h,time){
-
-		let [items,cxt] = [this.save,this.cxt];
-
-		this.globalChanged && this.initStyle(cxt); //初始化全局样式
-
-		!this.looped && this.countWidth(items); //计算文本宽度以及初始化位置（只执行一次）
-
-		if( this.paused ) return false; //暂停
-
-		this.refresh(items); //更新初始下标startIndex
-
-		let [i,item] = [this.startIndex];
-
-		cxt.clearRect(0,0,w,h);
-
-		for(  ; item = items[i++]; ){
-			this.step(item,time);
-			this.draw(item,cxt);
-			this.recovery(item,w);
-		}
-
-	}
-
 	//重置弹幕
 	reset(resetIndex = 0){
 
@@ -282,6 +266,7 @@ class normalDM{
 			} else {
 				item.leftTime = leftTime
 			}
+			item.pastTime = 0;
 			item.recovery = false;
 		}
 		this.startIndex = resetIndex;
@@ -292,8 +277,6 @@ class normalDM{
 
 		this.width = this.canvas.width;
 		this.height = this.canvas.height;
-
-		this.speedScale = Math.max(this.width / this.baseWidth, 0.7);
 
 		this.deleteRow();
 		this.countRows();
@@ -354,8 +337,7 @@ class normalDM{
 		const tempRow = this["getRow_"+type]();
 
 		if( row && item.type == "slide" ){
-			item.x += ( row.idx * 8 );
-			item.speed += ( row.idx / 3 );
+			item.duration -= ( row.idx * 150 ); //调整速度
 		}
 
 		//返回分配的通道
@@ -400,11 +382,11 @@ class normalDM{
 			item.height = parseInt(this.globalSize);
 			//更新初始 x
 			item.x = cw;
-			item.speed = this.baseSpeed;
+			item.duration = this.duration; //赋值持续时间
+			item.pastTime = 0;
 			if(item.type != "slide"){
-				item.x = (cw - w ) / 2;
+				item.x = ( cw - w ) / 2;
 				item.leftTime = this.leftTime;
-				item.speed = 0;
 			}
 			
 		}
@@ -420,22 +402,49 @@ class normalDM{
 		cxt.fillStyle = item.color || this.globalColor;
 	}
 
-	//计算
-	step(item,time){
+	//循环
+	update(w,h,time){
 
-		let row = this.getRow(item); //取得通道
+		let [items,cxt,Tween] = [this.save,this.cxt,this.Tween[this.type]];
+
+		this.globalChanged && this.initStyle(cxt); //初始化全局样式
+
+		!this.looped && this.countWidth(items); //计算文本宽度以及初始化位置（只执行一次）
+
+		if( this.paused ) return false; //暂停
+
+		this.refresh(items); //更新初始下标startIndex
+
+		let [i,item] = [this.startIndex];
+
+		cxt.clearRect(0,0,w,h);
+
+		for(  ; item = items[i++]; ){
+			let iw = item.width;
+			let ds = this.getDiretionSettings(iw,w); //获取不同方向时的设置
+			this.step(item,time,ds,Tween,this.timing);
+			this.draw(item,cxt);
+			this.recovery(item,ds);
+		}
+
+	}
+
+	//计算
+	step(item,time,ds,Tween,timing){
+
+		let [row,iw] = [this.getRow(item), item.width]; //取得通道
 
 		//如果通道已满，则新弹幕变更速度防止弹幕重叠
 		if(row.speedChange){
 			row.speedChange = false;
-			item.speed += ( ( Math.random() * 2 + 1 ) >> 0 );
+			item.duration -= ( ( Math.random() * 5000 ) >> 0 );
 		}
 
-		let speed = (( item.speed * this.speedScale * time / 16 ) >> 0);
-
+		item.pastTime += time;
+		
 		//更新参数
 		item.leftTime ? item.leftTime -= time : "";
-		item.x -= speed;
+		item.x = ( item.type == "slide" && Tween(timing,item.pastTime,ds.start,ds.dist,item.duration) ) || item.x;
 		item.y = item.y || row.y;
 		item.row = row;
 	}
@@ -456,27 +465,27 @@ class normalDM{
 	}
 
 	//回收弹幕和通道
-	recovery(item,w){
+	recovery(item,ds){
 		
 		if( item.type == "slide" ){
-			item.recovery = this.recoverySlide(item,w);
+			item.recovery = this.recoverySlide(item,ds);
 			return false;
 		}
 		
 		item.recovery = this.recoveryStatic(item);
 	}
 
-	recoverySlide(item,w){
+	recoverySlide(item,ds){
 
 		//回收slide类型
-		let [x,iw] = [item.x, item.width];
+		let x = item.x;
 
-		if( !item.rowRid && x + iw < w && !item.row.tempItem){
+		if( !item.rowRid && ds.flag(x) && !item.row.tempItem){
 			this.rows[item.type].unshift(item.row);
 			item.rowRid = true; //表明该行已被释放
 		}
 
-		if( x > - iw)
+		if( item.pastTime <= item.duration )
 		return false;
 
 		return true;
@@ -514,4 +523,18 @@ class normalDM{
 		}
 	}
 
+	//direction,不同方向的设定
+	getDiretionSettings(iw,w){
+		if( this.direction == "ltor" )
+		return {
+			start : -iw, //起点
+			dist : iw + w, //位移
+			flag : (x) => x >= iw //判断该弹幕是否显示完全
+		};
+		return {
+			start : w,
+			dist : -iw - w,
+			flag : (x) => x < w - iw
+		};
+	}
 }

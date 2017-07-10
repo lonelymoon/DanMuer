@@ -1,4 +1,4 @@
-# DanMuer V3.1.0
+# DanMuer
 本插件是一个弹幕发生器，利用HTML5 canvas + ES6来实现普通弹幕和高级弹幕发送。目前版本将从3.0.0开始。
 
 相较于前两版来说，第三版性能更好，而且实现了播放器模块和弹幕模块的解耦，也就是说相比第二版，第三版 可以适用但不限于播放器，可用性更高，而且实现了高级弹幕的发送，未来将慢慢补齐更多的功能和代码重构，希望大家遇到什么BUG或者是某些合理的需求，请将反馈提交到本邮箱：454236029@qq.com || z454236029@gmail.com
@@ -20,21 +20,19 @@ options（可选 Object）：配置选项
 options提供的参数：
 
 1. auto ： ( Boolean ) 是否自动运行，默认false
-2. callback ：( Function ) 鼠标右键触发后的回调函数，将返回一个被捕获的字幕对象
-3. direction : ( String ) 弹幕显示的方向，默认为从右到左,拥有两个值,"ltor"左到右和"rtol"右到左
-4. duration : ( Number ) 滚动型弹幕的持续时间(ms)，默认为 9000
-5. enableEvent ：( Boolean ) 是否开启鼠标右键的点击事件，默认false
-6. enable ：( Boolean ) 是否启用高级弹幕，默认true
-7. leftTime ：( Number ) 静止型弹幕默认的生存时间(ms)，默认为 2000
-8. fontSize ：( String ) 普通弹幕全局的字体大小，默认为 “26px”
-9. fontWeight ：( String ) 普通弹幕全局的字体粗细，默认为 “normal”
-10. fontFamily ：( String ) 普通弹幕全局的字体，默认为 “微软雅黑”
-11. fontStyle ：( String ) 普通弹幕全局的文本样式，默认为 “normal”
-12. fontColor ：( String ) 普通弹幕全局的文本填充颜色，默认为 “#FFFFFF”
-13. opacity ：( Number ) 透明度，默认为 1
-14. space ：( Number ) 普通弹幕之间的行距，默认为 10
-15. type : ( String ) 普通弹幕调用Tween类时选择的曲线类型，默认是“quad”（二次方），目前还有"cubic","quart","quint"三种
-16. timing : ( String ) Tween时间曲线函数类型，默认是"linear",还有"easeIn","easeOut","easeInOut"
+2. enableEvent ：( Boolean ) 是否开启鼠标右键的点击事件，默认false
+3. callback ：( Function ) 鼠标右键触发后的回调函数，将返回一个被捕获的字幕对象
+4. enable ：( Boolean ) 是否启用高级弹幕，默认true
+5. leftTime ：( Number ) 静止型弹幕默认的生存时间(ms)，默认为 2000
+6. space ：( Number ) 弹幕之间的行距，默认为 10
+7. baseSpeed ： ( Number ) 滚动型弹幕的基础速度，默认为 2
+8. baseWidth ： ( Number ) 自动调整弹幕速度倍数的被除数（默认为 800），公式为 canvas实际大小/baseWidth = 弹幕速度的缩放倍数（最小值为0.7）
+9. fontSize ：( String ) 普通弹幕全局的字体大小，默认为 “26px”
+10. fontWeight ：( String ) 普通弹幕全局的字体粗细，默认为 “normal”
+11. fontFamily ：( String ) 普通弹幕全局的字体，默认为 “微软雅黑”
+12. fontStyle ：( String ) 普通弹幕全局的文本样式，默认为 “normal”
+13. fontColor ：( String ) 普通弹幕全局的文本填充颜色，默认为 “#FFFFFF”
+14. opacity ：( Number ) 透明度，默认为 1
 
 后续如果新接口也将会在这里陆续更新。
 
@@ -90,8 +88,7 @@ options提供的参数：
 	fillStyle : "#66ccff", //填充颜色
 	strokeStyle : "#cccccc", //描边颜色
 	pastTime : 0, //不用设置，默认为0
-	type : "quad", //Tween时间曲线的类型,默认为"quad(二次方)",目前还有"cubic","quart","quint"三种
-	timing : "linear", //动画时间曲线，默认为linear，还有“easeIn”,“easeOut”,“easeInOut”
+	type : "linear" //动画时间曲线，默认为linear，还有“easeIn”,“easeOut”,“easeInOut”,只有基础的4种，而且只限于运动轨迹的计算，透明度没弄，三次方以上的算法暂时还没写，以后心情好就补上了，你们也可以自己在源码里面补，格式对了就可以
 }
 ```
 下面是文本类型的特有属性：
