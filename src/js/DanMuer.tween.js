@@ -1,3 +1,5 @@
+(function(window){
+
 //Tween运动时间曲线
 class Tween{
 	constructor(){
@@ -94,3 +96,11 @@ class Tween{
 	}
 
 }
+
+if( typeof module != 'undefined' && module.exports ){
+	module.exports = Tween;
+} else if( typeof define == "function" && define.amd ){
+	define(function(){ return Tween;});
+}
+
+}(window));

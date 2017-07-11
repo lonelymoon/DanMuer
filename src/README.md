@@ -1,6 +1,6 @@
 ### 本文件夹下存放的是源代码文件：
 
-1. danMuer.All.js： 主要文件，包含了完整的注释和代码
+1. danMuer.All.js： 主要文件，包含了最新版本完整的注释和代码
 2. danMuer.normalDM.js：与“普通弹幕”功能相关的代码都存放在本文件，主要体现在“normalDM”类上面 
 3. danMuer.effectDM.js：与“高级弹幕”功能相关的代码都存放在本文件，主要体现在“effectDM”类上面 
 4. danMuer.tween.js：与动画时间曲线相关功能相关的代码都存放在本文件，主要体现在“Tween”类上面 

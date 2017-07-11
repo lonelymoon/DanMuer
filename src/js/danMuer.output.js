@@ -1,3 +1,7 @@
+(function(window){
+
+const DMer = require("./DanMuer.main");
+
 let DanMuer = function(wrapper,opts){
 	let proxyDMer = new Proxy( new DMer(wrapper,opts), {
 		get : function(target,key){
@@ -30,10 +34,12 @@ let DanMuer = function(wrapper,opts){
 	};
 };
 
+window.DanMuer = DanMuer;
+
 if( typeof module != 'undefined' && module.exports ){
 	module.exports = DanMuer;
-} else if( typeof define == "function" && define.amd ){
-	define(function(){ return DanMuer;});
-} else {
-	window.DanMuer = DanMuer;
+} else if( typeof define === "function" && define.amd ){
+	define(function(){ return window.DanMuer;});
 }
+
+}(window));

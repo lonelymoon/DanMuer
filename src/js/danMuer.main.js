@@ -1,3 +1,8 @@
+(function(window){
+
+const normalDM = require("./DanMuer.normalDM");
+const effectDM = require("./DanMuer.effectDM");
+
 const loop = Symbol("loop");
 const init = Symbol("init"); 		//初始化
 const requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame;
@@ -218,3 +223,11 @@ class DMer {
 		return this.fps;
 	}
 }
+
+if( typeof module != 'undefined' && module.exports ){
+	module.exports = DMer;
+} else if( typeof define == "function" && define.amd ){
+	define(function(){ return DMer;});
+}
+
+}(window));

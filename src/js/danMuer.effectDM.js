@@ -1,3 +1,7 @@
+(function(window){
+
+const Tween = require("./DanMuer.tween");
+
 //特效弹幕
 class effectDM{
 
@@ -285,3 +289,11 @@ class effectDM{
 	}
 
 }
+
+if( typeof module != 'undefined' && module.exports ){
+	module.exports = effectDM;
+} else if( typeof define == "function" && define.amd ){
+	define(function(){ return effectDM;});
+}
+
+}(window));

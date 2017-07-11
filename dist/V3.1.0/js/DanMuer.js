@@ -1,3 +1,9 @@
+/*
+* DanMuer v 3.1.0
+* author 孤月
+* date 2017/07/10
+*/
+
 (function(window,Math,undefined){
 
 const loop = Symbol("loop");
@@ -257,6 +263,7 @@ class normalDM{
 		cxt.font = this.globalFont;
 		cxt.textBaseline = "middle";
 		cxt.fillStyle = this.globalColor;
+		cxt.strokeStyle = "rgba(0,0,0,0.3)";
 		cxt.globalAlpha = this.opacity;
 	}
 
@@ -466,7 +473,10 @@ class normalDM{
 		if( item.change ) {
 			this.updateStyle(item,cxt);
 		}
-		cxt.fillText(item.text,item.x,item.y);
+		let [text,x,y] = [item.text,item.x,item.y];
+
+		cxt.fillText(text,x,y);
+		cxt.strokeText(text,x,y);
 		cxt.restore();
 
 	}

@@ -1,3 +1,7 @@
+(function(window){
+
+const Tween = require("./DanMuer.tween");
+
 //普通弹幕
 class normalDM{
 	constructor(cv,opts = {}){
@@ -538,3 +542,11 @@ class normalDM{
 		};
 	}
 }
+
+if( typeof module != 'undefined' && module.exports ){
+	module.exports = normalDM;
+} else if( typeof define == "function" && define.amd ){
+	define(function(){ return normalDM;});
+}
+
+}(window));

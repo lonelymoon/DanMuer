@@ -1,0 +1,37 @@
+{
+	"name" : "DanMuer",
+	"version" : "3.1.0",
+	"description" : "A plug can create some 'bullet screen'(DanMu),一个创建弹幕的插件",
+	"Keywords" : [
+		"DanMu",
+		"danmu",
+		"bullet screen",
+		"弹幕"
+	],
+	"homepage" : "github.com/lonelymoon/DanMuer",
+	"bugs" : {
+		"url" : "https://github.com/lonelymoon/DanMuer/issues",
+		"email" : "454236029@qq.com"
+	},
+	"license" : "MIT",
+	"author" : {
+		"name" : "Zao Zhang",
+		"email" : "454236029@qq.com",
+		"url" : "https://segmentfault.com/u/guyue_55a632417f84f"
+	},
+	"main" : "dist/DanMuer.js",
+	"files" : [
+		"dist",
+		"demos",
+		"src",
+		"*.json",
+		"*.js"
+	],
+	"repository" : {
+		"type" : "git",
+		"url" : "https://github.com/lonelymoon/DanMuer.git"
+	},
+	"scripts" : {
+		"build" : "webpack"
+	}
+}
