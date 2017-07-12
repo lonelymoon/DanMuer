@@ -725,6 +725,7 @@ class normalDM{
 		cxt.font = this.globalFont;
 		cxt.textBaseline = "middle";
 		cxt.fillStyle = this.globalColor;
+		cxt.strokeStyle = "rgba(0,0,0,0.3)";
 		cxt.globalAlpha = this.opacity;
 	}
 
@@ -934,7 +935,10 @@ class normalDM{
 		if( item.change ) {
 			this.updateStyle(item,cxt);
 		}
-		cxt.fillText(item.text,item.x,item.y);
+		let [text,x,y] = [item.text,item.x,item.y];
+
+		cxt.fillText(text,x,y);
+		cxt.strokeText(text,x,y);
 		cxt.restore();
 
 	}
@@ -1106,30 +1110,40 @@ class effectDM{
 
 		step.timing = step.timing || "linear";
 		step.type = step.type || "quad";
+		//scale
 		step.scaleStartX = step.scaleStartX || 1;
 		step.scaleStartY = step.scaleStartY || 1;
 		step.scaleEndX = step.scaleEndX  || 1;
 		step.scaleEndY = step.scaleEndY  || 1;
+		//rotate
 		step.rotateEnd = step.rotateEnd || 0;
 		step.rotateStart = step.rotateStart || 0;
+		//translate
 		step.endX = step.endX || 0;
 		step.startX = step.startX || 0;
 		step.endY = step.endY || 0;
 		step.startY = step.startY || 0;
+		//skew
 		step.skewStartX = step.skewStartX || 0;
 		step.skewStartY = step.skewStartY || 0;
 		step.skewEndX = step.skewEndX || 0;
 		step.skewEndY = step.skewEndY || 0;
+		//opacity
+		step.opacityStart = step.opacityStart || 1;
+		step.opacityEnd = step.opacityEnd || 1;
+		//time
 		step.pastTime = step.pastTime || 0;
 		step.duration = step.duration || 3000;
-		step.scaleDistX = step.scaleEndX - step.scaleStartX;
-		step.scaleDistY = step.scaleEndY - step.scaleStartY;
-		step.rotateDist = step.rotateEnd - step.rotateStart;
-		step.opacity = step.opacity || 1;
+		//style
 		step.fillStyle = step.fillStyle || "#ffffff";
 		step.strokeStyle = step.strokeStyle || "#ffffff";
 		//圆形
 		step.radius = step.radius || 10;
+		//dist
+		step.scaleDistX = step.scaleEndX - step.scaleStartX;
+		step.scaleDistY = step.scaleEndY - step.scaleStartY;
+		step.rotateDist = step.rotateEnd - step.rotateStart;
+		step.opacityDist = step.opacityEnd - step.opacityStart;
 		//判断多边形
 		step.distX = step.points ? ( step.distX || 0 ) : step.endX - step.startX;
 		step.distY = step.points ? ( step.distY || 0 ) : step.endY - step.startY;
@@ -1194,6 +1208,7 @@ class effectDM{
 		stepItem.rotate = Tween(timing, past, stepItem.rotateStart, stepItem.rotateDist, duration );
 		stepItem.skewX = Tween(timing, past, stepItem.skewStartX, stepItem.skewDistX, duration );
 		stepItem.skewY = Tween(timing, past, stepItem.skewStartY, stepItem.skewDistY, duration);
+		stepItem.opacity = Tween(timing, past, stepItem.opacityStart, stepItem.opacityDist, duration);
 	}
 	//多边形特殊设置
 	stepCheckPolygon(stepItem,item){

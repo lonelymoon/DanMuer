@@ -242,7 +242,8 @@ function getStep(){
 	obj.skewEndX = getEle("#skewEX").value * 1;
 	obj.skewEndY = getEle("#skewEY").value * 1;
 	obj.duration = getEle("#dur").value * 1;
-	obj.opacity = getEle("#opa").value * 1;
+	obj.opacityStart = getEle("#so").value * 1;
+	obj.opacityEnd = getEle("#eo").value * 1;
 	obj.fillStyle = getEle("#fcolor").value;
 	obj.strokeStyle = getEle("#scolor").value;
 	obj.pastTime = 0;
