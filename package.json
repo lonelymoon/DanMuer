@@ -19,10 +19,9 @@
     "email": "454236029@qq.com",
     "url": "https://segmentfault.com/u/guyue_55a632417f84f"
   },
-  "main": "dist/DanMuer.js",
+  "main": "./index.js",
   "files": [
     "dist",
-    "demos",
     "src",
     "*.json",
     "*.js"
