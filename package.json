@@ -1,6 +1,6 @@
 {
-  "name": "DanMuer",
-  "version": "3.1.2",
+  "name": "danmuer",
+  "version": "3.1.3",
   "description": "A plug can create some 'bullet screen'(DanMu),一个创建弹幕的插件",
   "Keywords": [
     "DanMu",
@@ -20,12 +20,6 @@
     "url": "https://segmentfault.com/u/guyue_55a632417f84f"
   },
   "main": "./index.js",
-  "files": [
-    "dist",
-    "src",
-    "*.json",
-    "*.js"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/lonelymoon/DanMuer.git"
