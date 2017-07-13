@@ -7,8 +7,8 @@
 <link rel="stylesheet" type="text/css" href="main.css">
 </head>
 <body style="background:red">
+<div style="text-align:center;">本demo展示的不是所有功能，具体请参看项目的API说明，基本操作为 “添加普通弹幕->控制项->启动”,不同操作请切换下拉框</div>
 <div class="content">
-	本demo展示的不是所有功能，具体请参看项目的API说明
 	<div class="wrapper">
 		<video id="video" src="2.mp4" -webkit-playsinline playsinline></video>
 	</div>
@@ -32,6 +32,22 @@
 				<div class="setting-item">
 					<label>数量：</label>
 					<input type="tel" id="normal-num" placeholder="你可以输入一个数字" maxlength="6" >
+				</div>
+				<div class="setting-item">
+					<label>弹幕方向：</label>
+					<select id="direc">
+						<option value="rtol">从右往左</option>
+						<option value="ltor">从左往右</option>
+					</select>
+				</div>
+				<div class="setting-item">
+					<label>动画曲线类型：</label>
+					<select id="timing">
+						<option value="linear">匀速</option>
+						<option value="easeIn">缓入</option>
+						<option value="easeOut">缓出</option>
+						<option value="easeInOut">缓入缓出</option>
+					</select>
 				</div>
 				<div class="setting-item">
 					<button id="normal-btn">确定</button>
@@ -171,6 +187,24 @@
 					<input type="text" id="gfcolor" value="#66ccff" class="inline-input" >
 					<label>透明度：</label>
 					<input type="tel" id="gfopa" value="1" class="inline-input" >
+				</div>
+				<div class="setting-item">
+					<label>
+						<input type="checkbox" id="useGradient" />我想使用渐变
+					</label>
+				</div>
+				<div class="setting-item">
+					<label>渐变类型：</label>
+					<select id="gradientType">
+						<option value="linear">linear</option>
+						<option value="radial">radial</option>
+					</select>
+				</div>
+				<div class="setting-item">
+					<label>开始颜色：</label>
+					<input type="text" id="gscolor" value="red" class="inline-input" >
+					<label>结束颜色：</label>
+					<input type="text" id="gecolor" value="blue" class="inline-input" >
 				</div>
 				<div class="setting-item">
 					<button id="changeStyle-btn">确定</button>

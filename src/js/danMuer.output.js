@@ -30,6 +30,8 @@ let DanMuer = function(wrapper,opts){
 		disableEffect : DM.disableEffect, //不启用高级弹幕
 		enableEffect : DM.enableEffect, //启用高级弹幕
 		getSize : DM.getSize, //获取宽高,
+		timing : DM.changeTiming, //修改timing
+		direction : DM.changeDirection, //修改弹幕方向
 		getFPS : DM.getFPS //获取fps
 	};
 };

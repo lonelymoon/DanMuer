@@ -146,6 +146,18 @@ class normalDM{
 		this.cxt.clearRect(0,0,this.width,this.height);
 	}
 
+	//修改类型
+	changeTiming(timing,type){
+		this.type = type || "quad";
+		this.timing = timing || "linear";
+	}
+
+	//修改方向
+	changeDirection(direction){
+		this.clear();
+		this.direction = direction || "rtol";
+	}
+
 	//合并字体
 	font(){
 		this.globalFont = this.globalStyle + 
@@ -546,7 +558,6 @@ class normalDM{
 		};
 	}
 }
-
 if( typeof module != 'undefined' && module.exports ){
 	module.exports = normalDM;
 } else if( typeof define == "function" && define.amd ){

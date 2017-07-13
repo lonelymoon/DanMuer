@@ -211,6 +211,8 @@ let DanMuer = function(wrapper,opts){
 		disableEffect : DM.disableEffect, //不启用高级弹幕
 		enableEffect : DM.enableEffect, //启用高级弹幕
 		getSize : DM.getSize, //获取宽高,
+		timing : DM.changeTiming, //修改timing
+		direction : DM.changeDirection, //修改弹幕方向
 		getFPS : DM.getFPS //获取fps
 	};
 };
@@ -436,6 +438,16 @@ class DMer {
 		this.normal.addGradient(type,opts);
 	}
 
+	//改变普通弹幕方向
+	changeDirection(direction){
+		this.normal.changeDirection(direction);
+	}
+
+	//改变动画时间曲线
+	changeTiming(timing,type){
+		this.normal.changeTiming(timing,type);
+	}
+
 	//启用
 	start(){
 		if(this.drawing)
@@ -615,6 +627,18 @@ class normalDM{
 	//清屏
 	clearRect(){
 		this.cxt.clearRect(0,0,this.width,this.height);
+	}
+
+	//修改类型
+	changeTiming(timing,type){
+		this.type = type || "quad";
+		this.timing = timing || "linear";
+	}
+
+	//修改方向
+	changeDirection(direction){
+		this.clear();
+		this.direction = direction || "rtol";
 	}
 
 	//合并字体
@@ -1017,7 +1041,6 @@ class normalDM{
 		};
 	}
 }
-
 if( typeof module != 'undefined' && module.exports ){
 	module.exports = normalDM;
 } else if( true ){
@@ -1333,7 +1356,6 @@ class effectDM{
 	}
 
 }
-
 if( typeof module != 'undefined' && module.exports ){
 	module.exports = effectDM;
 } else if( true ){

@@ -65,7 +65,7 @@ select{
 .setting-item{
 	position: relative;
 	height: auto;
-	padding: 12px 0px;
+	padding: 8px 0px;
 }
 
 input{
@@ -106,4 +106,8 @@ button{
 button:hover{
 	cursor: pointer;
 	opacity: 0.9;
+}
+
+#useGradient{
+	height: auto;
 }

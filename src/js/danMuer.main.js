@@ -204,6 +204,16 @@ class DMer {
 		this.normal.addGradient(type,opts);
 	}
 
+	//改变普通弹幕方向
+	changeDirection(direction){
+		this.normal.changeDirection(direction);
+	}
+
+	//改变动画时间曲线
+	changeTiming(timing,type){
+		this.normal.changeTiming(timing,type);
+	}
+
 	//启用
 	start(){
 		if(this.drawing)

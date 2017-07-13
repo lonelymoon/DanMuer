@@ -300,7 +300,6 @@ class effectDM{
 	}
 
 }
-
 if( typeof module != 'undefined' && module.exports ){
 	module.exports = effectDM;
 } else if( typeof define == "function" && define.amd ){

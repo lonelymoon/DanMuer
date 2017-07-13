@@ -59,7 +59,9 @@ var save = [],
 
 getEle("#normal-btn").onclick = function(e){
 	var text = getEle("#normal-text").value,
-		num = getEle("#normal-num").value * 1;
+		num = getEle("#normal-num").value * 1,
+		direc = getEle("#direc").value,
+		timing = getEle("#timing").value;
 
 	for( var i = 0; i < num; i++ ){
 		var idx = (Math.random() * 2.9) >> 0;
@@ -74,7 +76,11 @@ getEle("#normal-btn").onclick = function(e){
 	save.sort(function(a,b){
 		return a.time - b.time;
 	});
+	
+	DMer.timing(timing);
+	DMer.direction(direc);
 
+	getEle("#normal-num").value = 0;
 	status.innerHTML = "添加"+num+"条弹幕";
 };
 
@@ -82,7 +88,8 @@ getEle("#changeStyle-btn").onclick = function(e){
 	var fsize = getEle("#gfsize").value,
 		fweight = getEle("#gfweight").value,
 		fcolor = getEle("#gfcolor").value,
-		fopa = getEle("#gfopa").value;
+		fopa = getEle("#gfopa").value,
+		checked = getEle("#useGradient").checked;
 
 	DMer.changeStyle({
 		fontSize : fsize,
@@ -90,6 +97,23 @@ getEle("#changeStyle-btn").onclick = function(e){
 		fontColor : fcolor,
 		opacity : fopa
 	});
+
+	if(checked){
+		var type = getEle("#gradientType").value,
+			sc = getEle("#gscolor").value,
+			ec = getEle("#gecolor").value;
+
+		DMer.addGradient(type,{
+			colorStops : [{
+				point : 0,
+				color : sc
+			},{
+				point : 1,
+				color : ec
+			}]
+		});
+	}
+
 };
 
 getEle("#filter-btn").onclick = function(e){

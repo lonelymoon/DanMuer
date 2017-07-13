@@ -1,7 +1,7 @@
 /*
-* DanMuer v 3.1.2
+* DanMuer v 3.1.4
 * author 孤月
-* date 2017/07/12
+* date 2017/07/13
 */
 
 (function(window,Math,undefined){
@@ -153,6 +153,18 @@ class normalDM{
 	//清屏
 	clearRect(){
 		this.cxt.clearRect(0,0,this.width,this.height);
+	}
+
+	//修改类型
+	changeTiming(timing,type){
+		this.type = type || "quad";
+		this.timing = timing || "linear";
+	}
+
+	//修改方向
+	changeDirection(direction){
+		this.clear();
+		this.direction = direction || "rtol";
 	}
 
 	//合并字体
@@ -1149,6 +1161,16 @@ class DMer {
 		this.normal.addGradient(type,opts);
 	}
 
+	//改变普通弹幕方向
+	changeDirection(direction){
+		this.normal.changeDirection(direction);
+	}
+
+	//改变动画时间曲线
+	changeTiming(timing,type){
+		this.normal.changeTiming(timing,type);
+	}
+
 	//启用
 	start(){
 		if(this.drawing)
@@ -1197,6 +1219,8 @@ let DanMuer = function(wrapper,opts){
 		disableEffect : DM.disableEffect, //不启用高级弹幕
 		enableEffect : DM.enableEffect, //启用高级弹幕
 		getSize : DM.getSize, //获取宽高,
+		timing : DM.changeTiming, //修改timing
+		direction : DM.changeDirection, //修改弹幕方向
 		getFPS : DM.getFPS //获取fps
 	};
 };
