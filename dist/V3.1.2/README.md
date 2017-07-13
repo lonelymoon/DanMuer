@@ -6,9 +6,19 @@
 # 兼容性
 所有现代浏览器,IE10+ ~~（IE除外），后面将会考虑写个IE用的兼容ES5版本~~
 
+# DEMO测试方法
+
+所有已发布功能项可以通过下拉框进行切换，目前包括“添加普通弹幕”，“添加高级弹幕”，“过滤”，“添加全局样式”，“控制项”
+
+演示地址： [demo](http://lonelymoon.linux2.jiuhost.com/DMv3/)
+
+1. 添加普通弹幕和添加高级弹幕都只是添加数据而已，不会运行插件，你需要跳到“控制项”点击启动，然后等弹幕出来即可
+2. 高级弹幕的动画是属于排队动画，你要先将修改后的数据“保存为第n步”（n至少为1）后点击确定添加才可以
+3. 过滤功能的话，最简单的“type”：“slide”，表示过滤所有滚动型的弹幕，或者“text”：“string”表示过滤包含string的所有弹幕
+4. 你可以先启动然后添加弹幕，也是一样的，操作顺序没太高要求
+
 # 调用方法
 调用接口非常的简单，通过调用一个函数接口。本插件还集成了requireJS和nodeJS的接口，如果需要也可以直接当成一个模块引用。
-
 
 ```
 var DMer = DanMuer( wrapper, options);
@@ -144,7 +154,7 @@ options提供的参数：
 3. pause() ：暂停运行，此时canvas上弹幕并不会被清除
 4. run() ：继续运行，与上面pause()对应
 5. changeStyle(options) ：修改全局文本样式，包括字体大小，样式，family，weight，color和opacity，与options的相关属性对应，参数类型为Object
-6. addGradient(type,options) ：将全局颜色变为渐变颜色；type包括linear和radius两种，options为一个对象，对象里包含（startX，startY，endX，endY，stops）五个参数，前两个参数表示渐变的起点坐标，接下来的两个参数表示渐变的终点坐标，最后一个参数表示colorStop，为一个数组，元素格式为
+6. addGradient(type,options) ：将全局颜色变为渐变颜色；type包括linear和radius两种，options为一个对象，对象里包含（startX，startY，endX，endY，colorStops）五个参数，前两个参数表示渐变的起点坐标，接下来的两个参数表示渐变的终点坐标，最后一个参数表示colorStop，为一个数组，元素格式为
 ```
 {
 	"point" : 0, //断点

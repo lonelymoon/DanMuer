@@ -154,7 +154,7 @@ options提供的参数：
 3. pause() ：暂停运行，此时canvas上弹幕并不会被清除
 4. run() ：继续运行，与上面pause()对应
 5. changeStyle(options) ：修改全局文本样式，包括字体大小，样式，family，weight，color和opacity，与options的相关属性对应，参数类型为Object
-6. addGradient(type,options) ：将全局颜色变为渐变颜色；type包括linear和radius两种，options为一个对象，对象里包含（startX，startY，endX，endY，stops）五个参数，前两个参数表示渐变的起点坐标，接下来的两个参数表示渐变的终点坐标，最后一个参数表示colorStop，为一个数组，元素格式为
+6. addGradient(type,options) ：将全局颜色变为渐变颜色；type包括linear和radius两种，options为一个对象，对象里包含（startX，startY，endX，endY，colorStops）五个参数，前两个参数表示渐变的起点坐标，接下来的两个参数表示渐变的终点坐标，最后一个参数表示colorStop，为一个数组，元素格式为
 ```
 {
 	"point" : 0, //断点
