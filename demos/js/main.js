@@ -251,23 +251,38 @@ function getStep(){
 		obj.radius = getEle("#radius").value * 1;
 	}
 
-	obj.startX = getEle("#sx").value * 1;
-	obj.startY = getEle("#sy").value * 1;
-	obj.endX = getEle("#ex").value * 1;
-	obj.endY = getEle("#ey").value * 1;
-	obj.scaleStartX = getEle("#scaleSX").value * 1;
-	obj.scaleStartY = getEle("#scaleSY").value * 1;
-	obj.scaleEndX = getEle("#scaleEX").value * 1;
-	obj.scaleEndY = getEle("#scaleEY").value * 1;
-	obj.rotateStart = getEle("#sr").value * 1;
-	obj.rotateEnd = getEle("#er").value * 1;
-	obj.skewStartX = getEle("#skewSX").value * 1;
-	obj.skewStartY = getEle("#skewSY").value * 1;
-	obj.skewEndX = getEle("#skewEX").value * 1;
-	obj.skewEndY = getEle("#skewEY").value * 1;
+	obj.translate = {
+		startX : getEle("#sx").value * 1,
+		startY : getEle("#sy").value * 1,
+		endX : getEle("#ex").value * 1,
+		endY : getEle("#ey").value * 1
+	};
+	
+	obj.scale = {
+		startX : getEle("#scaleSX").value * 1,
+		startY : getEle("#scaleSY").value * 1,
+		endX : getEle("#scaleEX").value * 1,
+		endY : getEle("#scaleEY").value * 1
+	};
+
+	obj.rotate = {
+		start : getEle("#sr").value * 1,
+		end : getEle("#er").value * 1
+	};
+
+	obj.skew = {
+		startX : getEle("#skewSX").value * 1,
+		startY : getEle("#skewSY").value * 1,
+		endX : getEle("#skewEX").value * 1,
+		endY : getEle("#skewEY").value * 1
+	};
+
+	obj.opacity = {
+		start : getEle("#so").value * 1,
+		end : getEle("#eo").value * 1
+	};
+
 	obj.duration = getEle("#dur").value * 1;
-	obj.opacityStart = getEle("#so").value * 1;
-	obj.opacityEnd = getEle("#eo").value * 1;
 	obj.fillStyle = getEle("#fcolor").value;
 	obj.strokeStyle = getEle("#scolor").value;
 	obj.pastTime = 0;
@@ -292,5 +307,18 @@ function deepClone(obj){
 	}
 	return tempObj;
 }
+
+/*setTimeout(function(){
+	DMer.inputEffect({
+		hide : false,
+		type : "polygon",
+		currentIndex : 0,
+		steps : [{
+			points : [{x : 20,y : 30},{x : 40, y : 20},{x : 30, y : 40}],
+			distX : 100,
+			distY : 50
+		}]
+	});
+},5000);*/
 
 }(window,Math));

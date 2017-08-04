@@ -244,7 +244,7 @@ class normalDM{
 		
 		//文本属性保存
 		this.globalSize = opts.fontSize || this.globalSize || "24px";   //字体大小
-		this.globalFamily = opts.fontFamily || this.globalFamily || "微软雅黑"; //字体
+		this.globalFamily = opts.fontFamily || this.globalFamily || "Microsoft JhengHei"; //字体
 		this.globalStyle = opts.fontStyle || this.globalStyle || "normal"; //字体样式
 		this.globalWeight = opts.fontWeight || this.globalWeight || "normal"; //字体粗细
 		this.globalColor = opts.fontColor || this.globalColor || "#ffffff"; //字体颜色
@@ -558,6 +558,7 @@ class normalDM{
 		};
 	}
 }
+
 if( typeof module != 'undefined' && module.exports ){
 	module.exports = normalDM;
 } else if( typeof define == "function" && define.amd ){

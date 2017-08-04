@@ -1,7 +1,7 @@
 /*
-* DanMuer v 3.1.4
+* DanMuer v 3.1.5
 * author 孤月
-* date 2017/07/13
+* date 2017/08/04
 */
 
 (function(window,Math,undefined){
@@ -253,7 +253,7 @@ class normalDM{
 		
 		//文本属性保存
 		this.globalSize = opts.fontSize || this.globalSize || "24px";   //字体大小
-		this.globalFamily = opts.fontFamily || this.globalFamily || "微软雅黑"; //字体
+		this.globalFamily = opts.fontFamily || this.globalFamily || "Microsoft JhengHei"; //字体
 		this.globalStyle = opts.fontStyle || this.globalStyle || "normal"; //字体样式
 		this.globalWeight = opts.fontWeight || this.globalWeight || "normal"; //字体粗细
 		this.globalColor = opts.fontColor || this.globalColor || "#ffffff"; //字体颜色
@@ -641,29 +641,51 @@ class effectDM{
 	//初始化参数
 	initStep(step){
 
-		step.timing = step.timing || "linear";
 		step.type = step.type || "quad";
 		//scale
-		step.scaleStartX = step.scaleStartX || 1;
-		step.scaleStartY = step.scaleStartY || 1;
-		step.scaleEndX = step.scaleEndX  || 1;
-		step.scaleEndY = step.scaleEndY  || 1;
+		step.scale = step.scale || {};
+		let scale = step.scale;
+		scale.startX = scale.startX || 1;
+		scale.startY = scale.startY || 1;
+		scale.endX = scale.endX || 1;
+		scale.endY = scale.endY || 1;
+		scale.distX = scale.endX - scale.startX;
+		scale.distY = scale.endY - scale.startY;
+		scale.timing = scale.timing || "linear";
 		//rotate
-		step.rotateEnd = step.rotateEnd || 0;
-		step.rotateStart = step.rotateStart || 0;
+		step.rotate = step.rotate || {};
+		let rotate = step.rotate;
+		rotate.start = rotate.start;
+		rotate.end = rotate.end;
+		rotate.dist = rotate.end - rotate.start;
+		rotate.timing = rotate.timing || "linear";
 		//translate
-		step.endX = step.endX || 0;
-		step.startX = step.startX || 0;
-		step.endY = step.endY || 0;
-		step.startY = step.startY || 0;
+		step.translate = step.translate || {};
+		let translate = step.translate;
+		translate.endX = translate.endX || 0;
+		translate.startX = translate.startX || 0;
+		translate.endY = translate.endY || 0;
+		translate.startY = translate.startY || 0;
+		translate.distX = translate.endX - translate.startX;
+		translate.distY = translate.endY - translate.startY;
+		translate.timing = translate.timing || "linear";
 		//skew
-		step.skewStartX = step.skewStartX || 0;
-		step.skewStartY = step.skewStartY || 0;
-		step.skewEndX = step.skewEndX || 0;
-		step.skewEndY = step.skewEndY || 0;
+		step.skew = step.skew || {};
+		let skew = step.skew;
+		skew.startX = skew.startX || 0;
+		skew.startY = skew.startY || 0;
+		skew.endX = skew.endX || 0;
+		skew.endY = skew.endY || 0;
+		skew.distX = skew.endX - skew.startX;
+		skew.distY = skew.endY - skew.startY;
+		skew.timing = skew.timing || "linear";
 		//opacity
-		step.opacityStart = step.opacityStart || 1;
-		step.opacityEnd = step.opacityEnd || 1;
+		step.opacity = step.opacity || {};
+		let opacity = step.opacity;
+		opacity.start = opacity.start || 1;
+		opacity.end = opacity.end || 1;
+		opacity.dist = opacity.end - opacity.start;
+		opacity.timing = opacity.timing || "linear";
 		//time
 		step.pastTime = step.pastTime || 0;
 		step.duration = step.duration || 3000;
@@ -672,16 +694,9 @@ class effectDM{
 		step.strokeStyle = step.strokeStyle || "#ffffff";
 		//圆形
 		step.radius = step.radius || 10;
-		//dist
-		step.scaleDistX = step.scaleEndX - step.scaleStartX;
-		step.scaleDistY = step.scaleEndY - step.scaleStartY;
-		step.rotateDist = step.rotateEnd - step.rotateStart;
-		step.opacityDist = step.opacityEnd - step.opacityStart;
 		//判断多边形
-		step.distX = step.points ? ( step.distX || 0 ) : step.endX - step.startX;
-		step.distY = step.points ? ( step.distY || 0 ) : step.endY - step.startY;
-		step.skewDistX = step.skewEndX - step.skewStartX;
-		step.skewDistY = step.skewEndY - step.skewStartY;
+		translate.distX = step.points ? ( step.distX || 0 ) : translate.distX;
+		translate.distY = step.points ? ( step.distY || 0 ) : translate.distY;
 	}
 
 	//更新canvas尺寸
@@ -728,24 +743,35 @@ class effectDM{
 
 		stepItem.pastTime += time;
 
-		let [timing,past,duration] = [stepItem.timing,stepItem.pastTime,stepItem.duration];
+		let [past,duration] = [stepItem.pastTime,stepItem.duration];
 		let Tween = this.Tween[stepItem.type];
+
+		let [translate,rotate,scale,skew,opacity] = [
+			stepItem.translate,
+			stepItem.rotate,
+			stepItem.scale,
+			stepItem.skew,
+			stepItem.opacity
+		];
+
 		//多边形特殊处理
 		if(item.type == "polygon" )
 		this.stepCheckPolygon(stepItem,item);
 
-		stepItem.x = Tween(timing, past, stepItem.startX, stepItem.distX, duration);
-		stepItem.y = Tween(timing, past, stepItem.startY, stepItem.distY, duration);
-		stepItem.scaleX = Tween(timing, past, stepItem.scaleStartX, stepItem.scaleDistX, duration );
-		stepItem.scaleY = Tween(timing, past, stepItem.scaleStartY, stepItem.scaleDistY, duration );
-		stepItem.rotate = Tween(timing, past, stepItem.rotateStart, stepItem.rotateDist, duration );
-		stepItem.skewX = Tween(timing, past, stepItem.skewStartX, stepItem.skewDistX, duration );
-		stepItem.skewY = Tween(timing, past, stepItem.skewStartY, stepItem.skewDistY, duration);
-		stepItem.opacity = Tween(timing, past, stepItem.opacityStart, stepItem.opacityDist, duration);
+		stepItem.x = Tween(translate.timing, past, translate.startX, translate.distX, duration);
+		stepItem.y = Tween(translate.timing, past, translate.startY, translate.distY, duration);
+		stepItem.scaleX = Tween(scale.timing, past, scale.startX, scale.distX, duration );
+		stepItem.scaleY = Tween(scale.timing, past, scale.startY, scale.distY, duration );
+		stepItem.rot = Tween(rotate.timing, past, rotate.start, rotate.dist, duration );
+		stepItem.skewX = Tween(skew.timing, past, skew.startX, skew.distX, duration );
+		stepItem.skewY = Tween(skew.timing, past, skew.startY, skew.distY, duration);
+		stepItem.opa = Tween(opacity.timing, past, opacity.start, opacity.dist, duration);
+
 	}
 	//多边形特殊设置
 	stepCheckPolygon(stepItem,item){
 		let currentIndex = item.currentIndex;
+		let translate = stepItem.translate;
 
 		//初始化进行计算
 		if( currentIndex == 0){
@@ -757,14 +783,14 @@ class effectDM{
 				len++;
 			}
 			if(len <= 0) return false;
-			stepItem.startX = tempX / len; //计算中心点
-			stepItem.startY = tempY / len;
+			translate.startX = tempX / len; //计算中心点
+			translate.startY = tempY / len;
 			stepItem.firstPoint = stepItem.points.concat([]).shift(); //获取moveTo的第一个点
 		} else if( !stepItem.points ) {
 			//调用上一步的数据
 			let prevStep = item.steps[currentIndex - 1];
-			stepItem.startX = prevStep.x;
-			stepItem.startY = prevStep.y;
+			translate.startX = prevStep.x;
+			translate.startY = prevStep.y;
 			stepItem.points = prevStep.points;
 			stepItem.firstPoint = prevStep.firstPoint;
 		}
@@ -783,8 +809,8 @@ class effectDM{
 		let [tx,ty] = [Math.tan(stepItem.skewX * rotUnit),Math.tan(stepItem.skewY * rotUnit)];
 		cxt.beginPath();
 		cxt.transform(stepItem.scaleX,tx,ty,stepItem.scaleY,x + w/2,y + h/2 );
-		cxt.rotate( stepItem.rotate * Math.PI / 180 );
-		cxt.globalAlpha = stepItem.opacity;
+		cxt.rotate( stepItem.rot * Math.PI / 180 );
+		cxt.globalAlpha = stepItem.opa;
 		cxt.rect( - w / 2 , - h / 2 , w , h);
 		cxt.closePath();
 		cxt.fillStyle = stepItem.fillStyle;
@@ -798,15 +824,15 @@ class effectDM{
 			stepItem.fontStyle || "normal",
 			stepItem.fontWeight || "normal",
 			stepItem.fontSize || "24px",
-			stepItem.fontFamily || "微软雅黑",
+			stepItem.fontFamily || "Microsoft JhengHei",
 			stepItem.text || ""
 		];
 		cxt.font = fstyle+" "+fweight+" "+fsize+" "+ffamily;
 		let [x,y,w,h] = [stepItem.x,stepItem.y,cxt.measureText(text).width,parseInt(fsize)];
 		let [tx,ty] = [Math.tan(stepItem.skewX * rotUnit),Math.tan(stepItem.skewY * rotUnit)];
 		cxt.transform(stepItem.scaleX,tx,ty,stepItem.scaleY,x + w/2,y + h/2 );
-		cxt.rotate( stepItem.rotate * Math.PI / 180 );
-		cxt.globalAlpha = stepItem.opacity;
+		cxt.rotate( stepItem.rot * Math.PI / 180 );
+		cxt.globalAlpha = stepItem.opa;
 		cxt.fillStyle = stepItem.fillStyle;
 		cxt.strokeStyle = stepItem.strokeStyle;
 		cxt.fillText(text,-w/2,-h/2);
@@ -817,20 +843,20 @@ class effectDM{
 		let points = stepItem.points;
 		let [ x, y, firstPoint ] = [ stepItem.x, stepItem.y, stepItem.firstPoint ];
 		let [tx,ty] = [ Math.tan(stepItem.skewX * rotUnit),Math.tan(stepItem.skewY * rotUnit)];
-
+		let [translate,cx = translate.startX, cy = translate.startY] = [stepItem.translate];
 		cxt.beginPath();
 		cxt.transform(stepItem.scaleX,tx,ty,stepItem.scaleY, x, y);
-		cxt.rotate( stepItem.rotate * Math.PI / 180 );
-		cxt.globalAlpha = stepItem.opacity;
+		cxt.rotate( stepItem.rot * Math.PI / 180 );
+		cxt.globalAlpha = stepItem.opa;
 		cxt.fillStyle = stepItem.fillStyle;
 		cxt.strokeStyle = stepItem.strokeStyle;
 
-		cxt.moveTo( firstPoint.x - x, firstPoint.y - y );
+		cxt.moveTo( firstPoint.x - cx, firstPoint.y - cy );
 
 		let [i,point] = [0];
 		
 		for( ; point = points[i++]; ){
-			cxt.lineTo( point.x - x, point.y - y );
+			cxt.lineTo( point.x - cx, point.y - cy );
 		}
 		cxt.closePath();
 		cxt.fill();
@@ -842,8 +868,8 @@ class effectDM{
 		let [tx,ty] = [Math.tan(stepItem.skewX * rotUnit),Math.tan(stepItem.skewY * rotUnit)];
 		cxt.beginPath();
 		cxt.transform(stepItem.scaleX,tx,ty,stepItem.scaleY,x + r,y + r );
-		cxt.rotate( stepItem.rotate * Math.PI / 180 );
-		cxt.globalAlpha = stepItem.opacity;
+		cxt.rotate( stepItem.rot * Math.PI / 180 );
+		cxt.globalAlpha = stepItem.opa;
 		cxt.fillStyle = stepItem.fillStyle;
 		cxt.strokeStyle = stepItem.strokeStyle;
 		cxt.arc( 0, 0, r, 0, Math.PI * 2, false );
