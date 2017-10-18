@@ -1,7 +1,7 @@
 /*
-* DanMuer v 3.1.5
+* DanMuer v 3.2.5
 * author 孤月
-* date 2017/08/04
+* date 2017/10/18
 */
 
 (function(window,Math,undefined){
@@ -481,11 +481,11 @@ class normalDM{
 		if(item.recovery || item.hide) 
 		return false;
 
+		let [text,x,y] = [item.text,item.x,item.y];
 		cxt.save();
 		if( item.change ) {
 			this.updateStyle(item,cxt);
 		}
-		let [text,x,y] = [item.text,item.x,item.y];
 
 		cxt.fillText(text,x,y);
 		cxt.strokeText(text,x,y);
@@ -695,8 +695,8 @@ class effectDM{
 		//圆形
 		step.radius = step.radius || 10;
 		//判断多边形
-		translate.distX = step.points ? ( step.distX || 0 ) : translate.distX;
-		translate.distY = step.points ? ( step.distY || 0 ) : translate.distY;
+		translate.distX = ( step.points && step.points.length > 0 ) ? ( step.distX || 0 ) : translate.distX;
+		translate.distY = ( step.points && step.points.length > 0 ) ? ( step.distY || 0 ) : translate.distY;
 	}
 
 	//更新canvas尺寸
@@ -876,6 +876,15 @@ class effectDM{
 		cxt.closePath();
 		cxt.fill();
 		cxt.stroke();
+	}
+
+	image( stepItem, cxt, Math , rotUnit ){
+		let [x,y,w,h,img] = [stepItem.x,stepItem.y,stepItem.width,stepItem.height,stepItem.img];
+		let [tx,ty] = [Math.tan(stepItem.skewX * rotUnit),Math.tan(stepItem.skewY * rotUnit)];
+		cxt.transform(stepItem.scaleX,tx,ty,stepItem.scaleY,x + w/2,y + h/2 );
+		cxt.rotate( stepItem.rot * Math.PI / 180 );
+		cxt.globalAlpha = stepItem.opa;
+		cxt.drawImage(img,0,0,img.naturalWidth,img.naturalHeight,-w/2,-h/2,w,h);
 	}
 
 	//回收已经完成的弹幕

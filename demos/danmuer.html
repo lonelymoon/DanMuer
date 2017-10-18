@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta charset="UTF-8" name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no">
+<title>DanMuer</title>
+<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+<link rel="stylesheet" type="text/css" href="css/main.css">
+</head>
+<div class="container-fluid">
+	<div class="content">
+		<div class="row">
+			<div class="column col-md-8 col-xs-12">
+				<div class="wrapper">
+					<video id="video" src="2.mp4" -webkit-playsinline playsinline></video>
+				</div>
+				<div class="showMsg"></div>
+			</div>
+			<div class="column col-md-4 col-xs-12">
+				<div class="controls">
+					<h3 class="first-h3">控制项:</h3>
+					<ul class="nav nav-pills control-settings">
+					  <li role="presentation" class="active"><a href="#" data-set="normal">普通弹幕</a></li>
+					  <li role="presentation"><a href="#" data-set="effect">高级弹幕</a></li>
+					  <li role="presentation"><a href="#" data-set="filter">过滤</a></li>
+					  <li role="presentation"><a href="#" data-set="style">全局样式</a></li>
+					  <li role="presentation"><a href="#" data-set="control">其他控制</a></li>
+					</ul>
+					<h3>具体参数:</h3>
+					<div class="scroll-wrapper">
+						<div class="scroll">
+							<div class="panel panel-primary" data-setting="normal">
+								<div class="panel-heading">普通弹幕控制参数：</div>
+								<div class="panel-body">
+									<div class="input-group">
+								      <span class="input-group-addon">添加</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="2000" maxlength="6" id="normal-danmu-num">
+									  <span class="input-group-addon">条弹幕</span>
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">弹幕内容:</span>
+									  <input type="text" class="form-control" aria-label="" placeholder="我是一条弹幕" id="normal-danmu-text">
+								    </div>
+								    <div class="btn-group" id="normal-danmu-direc" data-val="rtol">
+									  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									    弹幕方向 <span class="caret"></span>
+									  </button>
+									  <ul class="dropdown-menu">
+									    <li><a href="#" data-val="rtol">从右往左</a></li>
+									    <li><a href="#" data-val="ltor">从左往右</a></li>
+									  </ul>
+									</div>
+									<div class="btn-group" id="normal-danmu-timing" data-val="linear">
+									  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+									    时间曲线 <span class="caret"></span>
+									  </button>
+									  <ul class="dropdown-menu">
+									    <li><a href="#" data-val="linear">匀速</a></li>
+									    <li><a href="#" data-val="easeIn">缓入</a></li>
+									    <li><a href="#" data-val="easeOut">缓出</a></li>
+									    <li><a href="#" data-val="easeInOut">缓入缓出</a></li>
+									  </ul>
+									</div>
+									<button type="button" class="btn btn-primary btn-block" id="normal-submit-btn">确定</button>
+								</div>
+							</div>
+							<div class="panel panel-primary" data-setting="effect">
+								<div class="panel-heading">高级弹幕控制参数：</div>
+								<div class="panel-body">
+									<div class="btn-row">
+									   	<div class="btn-group">
+										  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										    弹幕类型 <span class="caret"></span>
+										  </button>
+										  <ul class="dropdown-menu inner-select">
+										    <li><a href="#" data-val="text">文本类型</a></li>
+										    <li><a href="#" data-val="rect">矩形类型</a></li>
+										    <li><a href="#" data-val="circle">圆形类型</a></li>
+										    <li><a href="#" data-val="polygon">多边形类型</a></li>
+										    <li><a href="#" data-val="image">图片类型</a></li>
+										  </ul>
+										</div>
+								   </div>
+								   <div class="owner-box o-active" data-val="text">
+								   		<div class="input-group">
+									      <span class="input-group-addon">文本</span>
+										  <input type="text" class="form-control" aria-label="" placeholder="我是弹幕" maxlength="20" id="effect-danmu-text">
+									    </div>
+									    <div class="input-group">
+									      <span class="input-group-addon">文本大小</span>
+										  <input type="text" class="form-control" aria-label="" placeholder="24" id="effect-danmu-size">
+										  <span class="input-group-addon">px</span>
+									    </div>
+									    <div class="input-group">
+									      <span class="input-group-addon">文本粗细</span>
+										  <input type="text" class="form-control" aria-label="" placeholder="normal / bolder / lighter" id="effect-danmu-weight">
+									    </div>
+									    <div class="input-group">
+									      <span class="input-group-addon">文本样式</span>
+										  <input type="text" class="form-control" aria-label="" placeholder="normal / italic" id="effect-danmu-style">
+									    </div>
+								   </div>
+								   <div class="owner-box" data-val="rect">
+								   		<div class="input-group">
+									      <span class="input-group-addon">宽度</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="100" maxlength="4" id="effect-danmu-rect-width">
+										  <span class="input-group-addon">高度</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="100" maxlength="4" id="effect-danmu-rect-height">
+									    </div>
+								   </div>
+								   <div class="owner-box" data-val="circle">
+								   		<div class="input-group">
+									      <span class="input-group-addon">半径</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="10" maxlength="4" id="effect-danmu-radius">
+									    </div>
+								   </div>
+								   <div class="owner-box" data-val="polygon">
+								   		<div class="input-group">
+									      <span class="input-group-addon">顶点集</span>
+										  <input type="text" class="form-control" aria-label="" placeholder="(1,2),(2,3),(4,5)..." id="effect-danmu-points">
+									    </div>
+									    <div class="input-group">
+									      <span class="input-group-addon">偏移位移</span>
+									      <span class="input-group-addon">X</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-distX">
+										  <span class="input-group-addon">Y</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-distY">
+									    </div>
+								   </div>
+								   <div class="owner-box" data-val="image">
+								   		<div class="form-group">
+											<label for="exampleInputFile">选择图片</label>
+											<input type="file" id="chooseImage" accept="image/png,image/gif,image/jpeg">
+											<p class="help-block">请选择一张图片上传</p>
+										</div>
+										<div class="input-group">
+									      <span class="input-group-addon">宽度</span>
+										  <input type="text" class="form-control" aria-label="" placeholder="0" maxlength="4" id="effect-danmu-image-width">
+										  <span class="input-group-addon">高度</span>
+										  <input type="text" class="form-control" aria-label="" placeholder="0" maxlength="4" id="effect-danmu-image-height">
+									    </div>
+								   </div>
+								   <h4>偏移</h4>
+								   <div class="input-group">
+								      <span class="input-group-addon">起始位置</span>
+								      <span class="input-group-addon">X</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-translate-sx">
+									  <span class="input-group-addon">px</span>
+									  <span class="input-group-addon">Y</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-translate-sy">
+									  <span class="input-group-addon">px</span>
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">终点位置</span>
+								      <span class="input-group-addon">X</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-translate-ex">
+									  <span class="input-group-addon">px</span>
+									  <span class="input-group-addon">Y</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-translate-ey">
+									  <span class="input-group-addon">px</span>
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">时间曲线</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="linear / easeIn / easeOut / easeInOut" id="effect-danmu-translate-timing">
+									</div>
+									<h4>缩放</h4>
+									<div class="input-group">
+								      <span class="input-group-addon">起始缩放倍数</span>
+								      <span class="input-group-addon">X</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="1" id="effect-danmu-scale-sx">
+									  <span class="input-group-addon">倍</span>
+									  <span class="input-group-addon">Y</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="1" id="effect-danmu-scale-sy">
+									  <span class="input-group-addon">倍</span>
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">终点缩放倍数</span>
+								      <span class="input-group-addon">X</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="1" id="effect-danmu-scale-ex">
+									  <span class="input-group-addon">倍</span>
+									  <span class="input-group-addon">Y</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="1" id="effect-danmu-scale-ey">
+									  <span class="input-group-addon">倍</span>
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">时间曲线</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="linear / easeIn / easeOut / easeInOut" id="effect-danmu-scale-timing">
+									</div>
+									<h4>旋转</h4>
+									<div class="input-group">
+								      <span class="input-group-addon">起始角度</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-rotate-sa">
+									  <span class="input-group-addon">度</span>
+									  <span class="input-group-addon">结束角度</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-rotate-ea">
+									  <span class="input-group-addon">度</span>
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">时间曲线</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="linear / easeIn / easeOut / easeInOut" id="effect-danmu-rotate-timing">
+									</div>
+									<h4>斜切</h4>
+									<div class="input-group">
+								      <span class="input-group-addon">起始斜切角度</span>
+								      <span class="input-group-addon">X</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-skew-sx">
+									  <span class="input-group-addon">度</span>
+									  <span class="input-group-addon">Y</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-skew-sy">
+									  <span class="input-group-addon">度</span>
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">结束斜切角度</span>
+								      <span class="input-group-addon">X</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-skew-ex">
+									  <span class="input-group-addon">度</span>
+									  <span class="input-group-addon">Y</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="0" id="effect-danmu-skew-ey">
+									  <span class="input-group-addon">度</span>
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">时间曲线</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="linear / easeIn / easeOut / easeInOut" id="effect-danmu-skew-timing">
+									</div>
+									<h4>透明度</h4>
+									<div class="input-group">
+								      <span class="input-group-addon">起始透明度</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="1" id="effect-danmu-opacity-start">
+									  <span class="input-group-addon">结束透明度</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="1" id="effect-danmu-opacity-end">
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">时间曲线</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="linear / easeIn / easeOut / easeInOut" id="effect-danmu-opacity-timing">
+									</div>
+									<h4>其他</h4>
+									<div class="input-group">
+								      	<span class="input-group-addon">生存时间</span>
+									  	<input type="tel" class="form-control" aria-label="" placeholder="3000" id="effect-danmu-duration">
+									  	<span class="input-group-addon">ms</span>
+								    </div>
+								    <div class="input-group">
+								    	<span class="input-group-addon">Tween曲线类型</span>
+									  	<input type="text" class="form-control" aria-label="" placeholder="quad / cubic / quart / quint" id="effect-danmu-type">
+								    </div>
+								    <div class="input-group">
+								      	<span class="input-group-addon">填充颜色</span>
+									  	<input type="text" class="form-control" aria-label="" placeholder="#66ccff" id="effect-danmu-fill">
+									 	<span class="input-group-addon">描边颜色</span>
+									  	<input type="text" class="form-control" aria-label="" placeholder="#ffffff" id="effect-danmu-stroke">
+								    </div>
+									<div class="btn-row">
+										<button type="button" class="btn btn-primary" id="effect-save-btn">保存为动画第 <strong>1</strong> 步</button>
+										<button type="button" class="btn btn-primary" id="effect-submit">生成弹幕</button>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-primary" data-setting="filter">
+								<div class="panel-heading">过滤：</div>
+								<div class="panel-body">
+									<div class="input-group">
+										<span class="input-group-addon">添加过滤：</span>
+										<span class="input-group-addon">关键字</span>
+										<input type="text" class="form-control" aria-label="" placeholder="type" id="filter-danmu-add-key">
+										<span class="input-group-addon">值</span>
+										<input type="text" class="form-control" aria-label="" placeholder="slide" id="filter-danmu-add-val">
+									</div>
+									<div class="btn-row">
+										<button type="button" class="btn btn-primary btn-block" id="filter-add-btn">添加</button>
+									</div>
+									<div class="input-group">
+										<span class="input-group-addon">删除过滤：</span>
+										<span class="input-group-addon">关键字</span>
+										<input type="text" class="form-control" aria-label="" placeholder="type" id="filter-danmu-remove-key">
+										<span class="input-group-addon">值</span>
+										<input type="text" class="form-control" aria-label="" placeholder="slide" id="filter-danmu-remove-val">
+									</div>
+									<div class="btn-row">
+										<button type="button" class="btn btn-primary btn-block" id="filter-remove-btn">删除</button>
+									</div>
+								</div>
+							</div>
+							<div class="panel panel-primary" data-setting="style">
+								<div class="panel-heading">全局样式控制</div>
+								<div class="panel-body">
+									<div class="input-group">
+								      <span class="input-group-addon">字体大小：</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="24" maxlength="3" id="normal-danmu-size">
+									  <span class="input-group-addon">px</span>
+								    </div>
+								    <div class="btn-row">
+								    	<div class="btn-group" id="normal-danmu-fontStyle" data-val="normal">
+										  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										    文本样式 <span class="caret"></span>
+										  </button>
+										  <ul class="dropdown-menu">
+										    <li><a href="#" data-val="italic">斜体</a></li>
+										    <li><a href="#" data-val="normal">普通</a></li>
+										  </ul>
+										</div>
+										<div class="btn-group" id="normal-danmu-fontWeight" data-val="normal">
+										  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										    文本粗细 <span class="caret"></span>
+										  </button>
+										  <ul class="dropdown-menu">
+										    <li><a href="#" data-val="normal">普通</a></li>
+										    <li><a href="#" data-val="bolder">粗体</a></li>
+										    <li><a href="#" data-val="lighter">细体</a></li>
+										  </ul>
+										</div>
+								    </div>
+									<div class="input-group">
+								      <span class="input-group-addon">文本颜色：</span>
+									  <input type="text" class="form-control" aria-label="" placeholder="#FFFFFF" id="normal-danmu-color">
+								    </div>
+								    <div class="input-group">
+								      <span class="input-group-addon">透明度：</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="100" maxlength="3" id="normal-danmu-opacity">
+								    </div>
+								    <div class="btn-row">
+								    	<div class="btn-group" id="normal-danmu-family" data-val="Microsoft JhengHei">
+										  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+										    文本字体： <span class="caret"></span>
+										  </button>
+										  <ul class="dropdown-menu">
+										    <li><a href="#" data-val="Microsoft Yahei">微软雅黑</a></li>
+										    <li><a href="#" data-val="SimHei">黑体</a></li>
+										    <li><a href="#" data-val="SimSun">宋体</a></li>
+										    <li><a href="#" data-val="Microsoft JhengHei">微软正黑体</a></li>
+										  </ul>
+										</div>
+								    </div>
+								    <div class="checkbox">
+								      	<label class="check-row">
+								       	 <input type="checkbox" id="use-gradient"> 我想使用渐变效果
+								      	</label>
+								      	<div class="btn-row">
+									    	<div class="btn-group" id="normal-danmu-gradient-type" data-val="linear">
+											  <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											    渐变类型： <span class="caret"></span>
+											  </button>
+											  <ul class="dropdown-menu">
+											    <li><a href="#" data-val="linear">线性渐变</a></li>
+											    <li><a href="#" data-val="radial">径向渐变</a></li>
+											  </ul>
+											</div>
+									    </div>
+									    <div class="input-group">
+									      <span class="input-group-addon">起始坐标：</span>
+									      <span class="input-group-addon">X</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="0" id="normal-danmu-gradient-startX">
+									      <span class="input-group-addon">Y</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="0" id="normal-danmu-gradient-startY">
+									    </div>
+									    <div class="input-group">
+									      <span class="input-group-addon">终点坐标：</span>
+									      <span class="input-group-addon">X</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="0" id="normal-danmu-gradient-endX">
+									      <span class="input-group-addon">Y</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="0" id="normal-danmu-gradient-endY">
+									    </div>
+									    <div class="input-group">
+									      <span class="input-group-addon">起始颜色：</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="#ffffff" id="normal-danmu-gradient-startColor">
+									      <span class="input-group-addon">终点颜色</span>
+										  <input type="tel" class="form-control" aria-label="" placeholder="#ffffff" id="normal-danmu-gradient-endColor">
+									    </div>
+								    </div>
+								    <button type="button" class="btn btn-primary btn-block" id="normal-change-btn">确定</button>
+								</div>
+							</div>
+							<div class="panel panel-primary" data-setting="control">
+								<div class="panel-heading">其他控制选项：</div>
+								<div class="panel-body">
+									<div class="btn-row">
+										<button type="button" class="btn btn-primary" id="all-start">启动</button>
+										<button type="button" class="btn btn-primary" id="all-stop">停止</button>
+										<button type="button" class="btn btn-primary" id="all-play">运行</button>
+										<button type="button" class="btn btn-primary" id="all-pause">暂停</button>
+									</div>
+									<div class="btn-row">
+										<button type="button" class="btn btn-primary" id="all-clear">清除弹幕</button>
+										<button type="button" class="btn btn-primary" id="all-reset">重置弹幕</button>
+										<button type="button" class="btn btn-primary" id="all-disable">禁用高级弹幕</button>
+									</div>
+									<div class="btn-row">
+										<button type="button" class="btn btn-primary" id="all-enable">起用高级弹幕</button>
+										<button type="button" class="btn btn-primary" id="all-fps">显示FPS</button>
+									</div>
+									<div class="input-group">
+								      <span class="input-group-addon">调整画布尺寸：</span>
+								      <span class="input-group-addon">宽度</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="600" maxlength="4" id="canvas-danmu-width">
+									  <span class="input-group-addon">高度</span>
+									  <input type="tel" class="form-control" aria-label="" placeholder="400" maxlength="4" id="canvas-danmu-height">
+								    </div>
+								    <div class="btn-row">
+								    	<button type="button" class="btn btn-primary" id="all-resize">确定调整</button>
+								    </div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/bootstrap.min.js"></script>
+<script type="text/javascript" src="js/DanMuer.js"></script>
+<script type="text/javascript" src="js/iscroll.js"></script>
+<script type="text/javascript" src="js/main.js"></script>
+</body>
+</html>

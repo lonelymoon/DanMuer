@@ -472,11 +472,11 @@ class normalDM{
 		if(item.recovery || item.hide) 
 		return false;
 
+		let [text,x,y] = [item.text,item.x,item.y];
 		cxt.save();
 		if( item.change ) {
 			this.updateStyle(item,cxt);
 		}
-		let [text,x,y] = [item.text,item.x,item.y];
 
 		cxt.fillText(text,x,y);
 		cxt.strokeText(text,x,y);
