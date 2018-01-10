@@ -18,7 +18,7 @@
 4. 你可以先启动然后添加弹幕，也是一样的，操作顺序没太高要求
 
 # 调用方法
-调用接口非常的简单，通过调用一个函数接口。本插件还集成了requireJS和nodeJS的接口，如果需要也可以直接当成一个模块引用。
+调用接口非常的简单，通过调用一个函数接口。本插件还集成了requireJS和webpack的接口，如果需要也可以直接当成一个模块引用。
 
 ```
 var DMer = DanMuer( wrapper, options);
@@ -70,7 +70,7 @@ options提供的参数：
 
 ```
 {
-    "type" : "", //必须，高级弹幕的类型，目前有四种类型（"text","rect","polygon","circle"）
+    "type" : "", //必须，高级弹幕的类型，目前有五种类型（"text","rect","polygon","circle","image"）
     "currentIndex" : 0,//必须，表示目前弹幕正在运行的步骤，默认为0就行，不用更改此值
     "hide" : false,//必须，默认为false，不用更改此值，表示是否显示该弹幕
     "steps" : [] //必须，表示该弹幕一共有几个步骤，用于排队动画的实现，与currentIndex配合使用
